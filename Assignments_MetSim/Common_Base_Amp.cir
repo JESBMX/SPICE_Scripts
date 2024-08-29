@@ -1,0 +1,68 @@
+Common_Base_Amp
+* -------------------------------------------
+*            Common Base Amplifier
+
+Vs   in  0   DC 0V   AC 1V SIN (0V 250mV 1kHz)
+Vcc  vp  0   DC 12V
+Q1   c   b   e  Q2N2222
+* Q1   c   b   e  npn_ideal
+RS   in  s   50
+RE   e   0   910
+RC   c   vp  270
+R1   b   vp  5.3K
+R2   b   0   7.5K
+RL   out 0   1K
+CE   e   s   10uF
+CB   b   0   10uF
+CL   c   out 10uF
+
+.MODEL Q2N2222 NPN
++(IS=3.108E-15 XTI=3 EG=1.11 VAF=131.5 BF=217.5
++ NE=1.541 ISE=190.7E-15 IKF=1.296 XTB=1.5 BR=6.18
++ NC=2 ISC=0 IKR=0 RC=1 CJC=14.57E-12 VJC=.75
++ MJC=.3333 FC=.5 CJE=26.08E-12 VJE=.75 MJE=.3333
++ TR=51.35E-9 TF=451E-12 ITF=.1 VTF=10 XTF=2)
+
+* Quasi ideal transistors
+.model npn_ideal npn (Is=1.8fA Bf=150 VAf=300V)
+.model pnp_ideal pnp (Is=1.8fA Bf=150 VAf=300V)
+
+.control
+destroy all
+
+* AC DEC 10 10Hz 900MEGHz
+* Av = v(out)/v(in)
+* Zin = v(in)/i(Vs)
+* plot vdb(out)
+* plot mag(Av)
+* plot mag(Zin)
+
+* TRAN 1us 5ms
+* plot v(in) v(out)
+
+* OP
+* print all
+
+* TF v(out) Vs
+* print all
+
+* AC DEC 50 10Hz 900MEGHz 
+* mAv = mag(v(out)/v(in)) 
+* plot mAv 
+* NOISE v(out) Vs DEC 10 100Hz 900MEGHz 
+* plot sqrt(inoise) sqrt(onoise) 
+* print sqrt(inoise_total) sqrt(onoise_total) 
+* print sqrt(inoise_spectrum) sqrt(onoise_spectrum)
+
+let count = 0
+	while count < 5
+		alter RS = 10 + 10*count
+		AC DEC 10 10Hz 900MEGHz
+		TRAN 5us 5ms
+		let count = count + 1
+	end
+plot db(ac1.v(out)) db(ac2.v(out)) db(ac3.v(out)) db(ac4.v(out)) db(ac5.v(out))
+plot tran1.v(out) tran2.v(out) tran3.v(out) tran4.v(out) tran5.v(out)
+
+.endc
+.end

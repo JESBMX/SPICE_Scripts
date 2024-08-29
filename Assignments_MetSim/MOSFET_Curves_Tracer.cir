@@ -1,0 +1,24 @@
+MOSFET_Curves_Tracer
+* -------------------------------------------
+*           MOSFET Curves Tracer
+
+* MOSFET under test
+MT   d   g   0  0  n_emosfet L=2um W=40um
+
+* EMOSFET model statements
+* Level 1: Shichman-Hodges model
+* KP: Transconductance parameter, KP = miu*Cox
+* VTO: Threshold voltage, Vt
+* LAMBDA: Channel-length modulation factor (inv of VA)
+.MODEL n_emosfet NMOS level=1
++(KP=150u VTO=+1.8V LAMBDA=0.05)
+
+VDS	d	0	DC	1V
+VGS	g	0	DC	1V
+
+.control
+DC	VDS	0V	50V	0.1V	VGS	0V	5V	0.5V
+
+Ids = -i(VDS)
+PLOT	Ids	xlabel	VDS
+.endc

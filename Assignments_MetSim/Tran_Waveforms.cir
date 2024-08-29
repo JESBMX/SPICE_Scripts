@@ -1,0 +1,26 @@
+Tran_Waveforms
+* -------------------------------------------
+*        Transient Special Waveforms
+
+Vs1 s1 0 SIN (3V 1V 1kHz)
+Vs2 s2 0 SIN (3V 1V 1kHz 1ms 500)
+Vs3 s3 0 EXP (-2V 3V 1ms 0.3ms 3ms 0.1ms)
+Vs4 s4 0 SFFM (2V 5V 10kHz 7 1kHz)
+Vs5 s5 0 PWL (0ms 0V 1ms 5V 2ms 3V 3ms -4V 4ms -2V 5ms 2V 8ms 2V 10ms 0V)
+
+R1 s1 0 1k
+R2 s2 0 1k
+R3 s3 0 1k
+R4 s4 0 1k
+R5 s5 0 1k
+
+.control
+TRAN 1us 10ms
+PLOT V(s1)
+PLOT V(s2)
+PLOT V(s3)
+PLOT V(s4)
+PLOT V(s5)
+.endc
+
+.end

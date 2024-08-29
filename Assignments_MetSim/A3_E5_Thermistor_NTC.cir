@@ -1,0 +1,34 @@
+A3_E5_Thermistor_NTC
+* -------------------------------------------
+*           A3_E5 - Thermistor NTC
+
+* Physical variables definition
+VT	T	0	DC	0
+
+* Constants definition
+VA	A	0	DC	4.7e-3
+VB	B	0	DC	-459.88e-6
+VC	C	0	DC	5.4837e-6
+
+* Controlled source definition for system of equations solution
+BRT 0 RT i=v(A)+(v(B)*ln(v(RT)))+(v(C)*(ln(v(RT)))^3)-(1/v(T))
+
+* Connection of subcircuit for calculations of zeros of the equation
+XTh	RT	Variable
+* .NODESET v(RT)=0
+
+* External files
+.INCLUDE	Variable.sub
+
+* Analysis definition
+.control
+destroy all
+
+DC VT 230 320 1
+
+PLOT v(RT)
++	title Thermistor_Resistance xlabel Temp ylabel RT xunits K yunits ohm
+
+.endc
+
+.end

@@ -1,0 +1,48 @@
+Voltage_Limiter
+* -------------------------------------------
+*               Voltage Limiter
+
+* Components connection
+
+R1	Vp	Vpx	10ohm
+R2	Vn	Vnx	10ohm
+RL	out	0	10kohm
+
+* D1	Vpx	out	ideal_diode
+* D2	out	Vnx	ideal_diode
+* D3	in	Vnx	ideal_diode
+* D4	Vpx	in	ideal_diode
+
+D1	Vpx	out	D1N4004
+D2	out	Vnx	D1N4004
+D3	in	Vnx	D1N4004
+D4	Vpx	in	D1N4004
+
+* Sources definition
+
+Vdc1	Vp	0	DC	3V
+Vdc2	Vn	0	DC	-3V
+Vi		in	0	DC	1V	SIN(0V	10V	1kHz)
+
+* Models definition
+
+* 1N4004 - 1A 400V General Purpose Rectifier
+* Fairchild (now National Semiconductors)
+.MODEL  D1N4004  D (IS=3.699E-09 RS=1.756E-02 N=1.774
++       XTI=3.0 EG=1.110 CJO=1.732E-11 M=0.3353
++       VJ=0.3905 FC=0.5 BV=400 IBV=1.0E-03)
+
+* Quasi Ideal Diode
+.model ideal_diode D (Is=1pA n=0.01)
+
+.control
+DC Vi -5V 5V 0.1V
+PLOT v(out) xlabel Vin
+
+TRAN 1us 4ms
+PLOT v(in) v(out)
+
+FOUR 1kHz v(in) v(out)
+.endc
+
+.end

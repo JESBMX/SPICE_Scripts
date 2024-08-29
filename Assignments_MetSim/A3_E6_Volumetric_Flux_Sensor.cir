@@ -1,0 +1,40 @@
+A3_E6_Volumetric_Flux_Sensor
+* -------------------------------------------
+*       A3_E6 - Volumetric_Flux_Sensor
+
+* Physical variables definition
+VQ	Q	0	DC	0
+
+* Constants definition
+VK1	K1	0	DC	119.5
+VK2	K2	0	DC	1.8
+
+* Output variable definition
+VS	S	0	DC	0V
+
+* Controlled source definition for system of equations solution
+BVs Vs 0 v=v(K2)*(v(Q)/v(K1))^2
+
+* Load to test sensor model
+RL	Vs	0	1ohm
+
+* Connection of subcircuit for calculations of zeros of the equation
+XSens	Vs	Variable
+* .NODESET v(Vs)=0
+
+* External files
+.INCLUDE	Variable.sub
+* .INCLUDE	Derivative.sub
+
+* Analysis definition
+.control
+destroy all
+
+DC VQ 0 200 5
+
+PLOT v(Vs)
++	title Vs xlabel Flux ylabel Vs xunits gal_min yunits V
+
+.endc
+
+.end

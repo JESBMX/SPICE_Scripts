@@ -1,0 +1,9 @@
+Variable
+* ------------------------------------------------------------------
+* Variable subcircuit for solution of nonlinear systems of equations
+
+.SUBCKT Variable Yi
+RR	Yi	int	1ohm
+VV	int	0	0V
+FIv	0	Yi	VV	1
+.ENDS

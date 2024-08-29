@@ -1,0 +1,19 @@
+Simple_Voltage_Divider
+* -------------------------------------------
+*           Simple Voltage Divider
+
+Vs	in	0	DC 4V
+R1	in	out	1kohm
+R2	out	0	3kohm
+
+.control
+OP
+PRINT V(in) V(out) I(Vs)
+* WRITE VoltDiv_op_out.csv V(in) V(out) I(Vs)
+
+SENS V(out)
+
+PRINT all
+.endc
+
+.end

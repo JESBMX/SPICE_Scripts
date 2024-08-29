@@ -1,0 +1,88 @@
+A3_E6_Signal_Conditioner
+* -------------------------------------------
+*         A3_E6 - Signal Conditioner
+
+
+
+* -------------------------------------------
+* Conditioner circuit connection
+
+* Components connections
+R1	2	3	25.15kohm
+R2a	2	4	10kohm
+R2b	3	5	10kohm
+R3a	4	6	10kohm
+R3b	5	7	10kohm
+R4a	6	8	10kohm
+R4b	7	0	10kohm
+R5a	8	9	1kohm
+R5b	R	10	1kohm
+R6a	9	O	1kohm
+R6b	10	0	1kohm
+
+RO	O	0	1kohm
+
+X1	1	2	Vpos	Vneg	4	UA741
+X2	0	3	Vpos	Vneg	5	UA741
+X3	7	6	Vpos	Vneg	8	UA741
+X4	10	9	Vpos	Vneg	O	UA741
+
+* Sources definition
+VR	R	0	DC	-0.091V
+
+VDD	Vpos	0	DC	9V
+VSS	Vneg	0	DC	-9V
+
+* External files (models, subcircuits, libraries)
+.INCLUDE	UA741.sub
+
+
+
+* -------------------------------------------
+* Sensor definition
+
+* Physical variables definition
+VQ	Q	0	DC	0
+
+* Constants definition
+VK1	K1	0	DC	119.5
+VK2	K2	0	DC	1.8
+
+* Output variable definition
+VS	S	0	DC	0V
+
+* Controlled source definition for system of equations solution
+BVS 1 0 v=v(K2)*(v(Q)/v(K1))^2
+
+* Connection of subcircuit for calculations of zeros of the equation
+XSens	1	Variable
+* .NODESET v(Q)=20 v(o)=0
+
+* External files
+.INCLUDE	Variable.sub
+* .INCLUDE	Derivative.sub
+
+* Analysis definition
+.control
+destroy all
+
+DC VQ 0 200 5
+
+PLOT v(1)
++	title Vs xlabel Flux ylabel Vs xunits gal_min yunits V
+
+* PLOT v(2)
+* PLOT v(3)
+* PLOT v(4)
+* PLOT v(5)
+* PLOT v(6)
+* PLOT v(7)
+* PLOT v(8)
+PLOT v(O)
++	title Vo xlabel Flux ylabel Vo xunits gal_min yunits V
+
+WRITE Conditioned_Output.csv v(Q) v(O)
+
+.endc
+
+.end

@@ -1,0 +1,56 @@
+A4_Notch_Filter
+* -------------------------------------------
+*             A4 - Notch Filter
+
+* Components connection
+R1	2	5	22kohm
+R2	3	5	48.6kohm
+R3	1	4	420kohm
+R4	6	7	200ohm
+R5	6	0	4.8kohm
+
+C1	1	2	47nF
+C2	2	3	47nF
+C3	3	4	47nF
+
+X1	4	7	Vpos	Vneg	7	LM324
+X2	6	5	Vpos	Vneg	5	LM324
+
+* X1	4	7	7	OpAmp
+* X2	6	5	5	OpAmp
+
+* Sources definition
+Vcc	Vpos	0	DC	15V
+Vss	Vneg	0	DC	-15V
+
+Vin	1	0	DC 0V	AC SIN(0V 1V 60Hz)
+
+* Models & subcircuits
+
+* Quasi-ideal OpAmp Subcircuit
+* Connections:   Non-Inverting Input
+*                | Inverting Input
+*                | | Output
+*                | | |
+.SUBCKT OpAmp    1 2 3
+	Ri	1	2	100MEGohm
+	Ro	int	3	0.01ohm
+	
+	EOpamp	int	0	1	2	100e6
+.ENDS
+
+* External files (models, subcircuits, libraries)
+.INCLUDE	LM324.sub
+
+.control
+AC LIN 81 20Hz 100Hz
+
+Av_mag = mag(v(7)/v(1))
+
+WRITE NotchFilter_AC.csv Av_mag
+
+PLOT Av_mag
++	xlabel Frequency ylabel Av xunits Hz yunits V/V
+.endc
+
+.end

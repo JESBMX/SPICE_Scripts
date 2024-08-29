@@ -1,0 +1,80 @@
+A3_E3_Amplifier
+* -------------------------------------------
+*        A3_E3 - MOSFETs Amplifier
+
+* Components connection
+* M1	1	s	5	5	PMOSFET	L=10um	W=100um
+* M2	6	7	5	5	PMOSFET	L=10um	W=100um
+* M3	6	4	1	1	NMOSFET	L=10um	W=50um
+* M4	2	4	1	1	NMOSFET	L=10um	W=50um
+* M5	3	8	9	9	PMOSFET	L=10um	W=50um
+* M6	5	8	9	9	PMOSFET	L=10um	W=100um
+* M7	o	8	9	9	PMOSFET	L=10um	W=100um
+* M8	1	6	o	o	PMOSFET	L=10um	W=100um
+
+* R1	7	o	9kohm
+* R2	7	0	1kohm
+
+* RJM4	2	4	10uohm
+* RJM5	3	8	10uohm
+
+M1	1	s	5	5	PMOSFET	L=10um	W=100um
+M2	6	7	5	5	PMOSFET	L=10um	W=100um
+M3	6	4	1	1	NMOSFET	L=10um	W=50um
+M4	4	4	1	1	NMOSFET	L=10um	W=50um
+M5	3	3	9	9	PMOSFET	L=10um	W=50um
+M6	5	3	9	9	PMOSFET	L=10um	W=100um
+M7	o	3	9	9	PMOSFET	L=10um	W=100um
+M8	1	6	o	o	PMOSFET	L=10um	W=100um
+
+R1	7	o	9kohm
+R2	7	0	1kohm
+
+* Sources definition
+I1	3	4	DC	10uA
+VDD	1	0	DC	5V
+VSS	9	0	DC	-5V
+VS	s	0	DC	0V	AC	1V
+
+* Models
+.MODEL NMOSFET NMOS LEVEL=2
++	(KP=60u VTO=+0.8V LAMBDA=0.0 GAMMA=0.0)
+
+.MODEL PMOSFET PMOS LEVEL=2
++	(KP=30u VTO=-0.8V LAMBDA=0.0 GAMMA=0.0)
+
+* Analysis definition
+.control
+destroy all
+
+* AC DEC 100 10Hz 900MEGHz
+* Av = v(s)/v(o)
+
+* PLOT Av xlabel Frequency ylabel Gain xunits Hz yunits x
+* PLOT v(o) xlabel Frequency ylabel Vo xunits Hz yunits V
+
+let count = 0
+	while count <= 0.05
+		alter @NMOSFET[LAMBDA] = count
+		alter @PMOSFET[LAMBDA] = count
+		
+		AC DEC 100 10Hz 900MEGHz
+
+*		Av = v(s)/v(o)
+*		PLOT Av
+		
+		let count = count + 0.01
+	end
+
+PLOT ac1.v(o) ac2.v(o) ac3.v(o) ac4.v(o) ac5.v(o) ac6.v(o)
++	xlabel Frequency ylabel Vo xunits Hz yunits V
+
+* PLOT ac1.Av ac2.Av ac3.Av ac4.Av ac5.Av ac6.Av
+* +	xlabel Frequency ylabel Gain xunits Hz yunits x
+
+* PLOT (ac1.v(o)/v(s)) (ac2.v(o)/v(s)) (ac3.v(o)/v(s)) (ac4.v(o)/v(s)) (ac5.v(o)/v(s)) (ac6.v(o)/v(s))
+* +	xlabel Frequency ylabel Gain xunits Hz yunits V/V
+
+.endc
+
+.end

@@ -1,0 +1,21 @@
+RLC_Tank
+* -------------------------------------------
+*                 RLC Tank
+
+Is 0 in DC 0 AC 1mA PULSE(0A 1mA 0s 1ns 1ns 10ns 1us)
+Vt in s DC 0V
+L s 0 10uH
+R s 0 820
+C s 0 2.53nF
+
+.control
+
+AC LIN 1000 50Hz 2MEGHz
+PLOT V(s)
+
+TRAN 1ns 15us
+PLOT V(s)
+PLOT I(Vt)
+.endc
+
+.end

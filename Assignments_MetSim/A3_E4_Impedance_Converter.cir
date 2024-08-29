@@ -1,0 +1,68 @@
+A3_E4_Impedance_Converter
+* -------------------------------------------
+*        A3_E4 - Impedance Converter
+
+* Components connections
+R1	1	2	1kohm
+R2	2	3	3.3kohm
+R3	3	4	3.3kohm
+R5	5	0	1kohm
+
+C4	4	5	1uF
+
+X1	1	3	4	OpAmp
+X2	5	3	2	OpAmp
+
+* X1	1	3	Vpos	Vneg	4	UA741
+* X2	5	3	Vpos	Vneg	2	UA741
+
+* Sources definition
+VL	1	0	DC	0V	AC	SIN(0V 1V 8Hz)
+
+* VDD	Vpos	0	DC	15V
+* VSS	Vneg	0	DC	-15V
+
+* Models & subcircuits
+
+* Quasi-ideal OpAmp Subcircuit
+* Connections:   Non-Inverting Input
+*                | Inverting Input
+*                | | Output
+*                | | |
+.SUBCKT OpAmp    1 2 3
+	Ri	1	2	100MEGohm
+	Ro	int	3	0.01ohm
+	
+	EOpamp	int	0	1	2	100e6
+.ENDS
+
+* Libraries
+.LIB	UA741.sub
+
+* Analysis definition
+.control
+destroy all
+
+AC LIN 1000 8Hz 8kHz
+
+Vo = mag(v(5))
+Zin = v(1)/-i(VL)
+Zin_mag = mag(Zin)
+Zin_pha = ph(Zin)*180/pi
+XL = im(Zin)
+Leq = im(Zin)/(2*pi*frequency)
+
+PLOT Vo
++	title Output_Voltage xlabel Freq ylabel Vo
+PLOT Zin_mag
++	title Input_Impedance_Magnitude xlabel Freq ylabel Zin_mag yunits ohm
+PLOT Zin_pha
++	title Input_Impedance_Phase xlabel Freq ylabel Zin_pha yunits deg
+PLOT Leq
++	title Equivalent_Inductance xlabel Freq ylabel Leq yunits H
+PLOT XL
++	title Input_Reactance xlabel Freq ylabel X yunits ohm
+
+.endc
+
+.end

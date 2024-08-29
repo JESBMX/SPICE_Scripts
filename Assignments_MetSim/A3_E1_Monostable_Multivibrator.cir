@@ -1,0 +1,47 @@
+A3_E1_Monostable_Multivibrator
+* -------------------------------------------
+*      A3_E1 - Monostable Multivibrator
+
+* Components connections
+R1	C	0	1kohm
+R2	C	A	9kohm
+R3	B	A	50kohm
+R4	E	0	100kohm
+
+C1	B	0	0.1uF
+C2	in	E	0.1uF
+
+D1	B	0	D1N4148
+D2	C	E	D1N4148
+
+X1	C	B	Vpos	Vneg	A	UA741
+
+* Sources definition
+Vcc	Vpos	0	DC	17V
+Vss	Vneg	0	DC	-17V
+
+* Vin	in	0	DC 0V AC 	PWL (0ms 15V 1ms 15V 1ms 0V 1.05ms 0V 1.05ms 15V 3ms 15V)
+Vin	in	0	DC 0V AC PULSE (15V 0V 1ms 0ms 0ms 50us 4ms)
+
+.NODESET v(A)=0V
+
+* Models
+.MODEL	D1N4148	D	(Is=5.84n N=1.94 Rs=.7017 Ikf=44.17m Xti=3 Eg=1.11 Cjo=.95p
++					M=.55 Vj=.75 Fc=.5 Isr=11.07n Nr=2.088 Bv=100 Ibv=100u Tt=11.07n)
+
+* Libraries
+.LIB	UA741.sub
+
+* Analysis definition
+.control
+destroy all
+
+TRAN	1us	3ms
+PLOT	V(in)
+PLOT	V(A)
+PLOT	V(B)
+PLOT	V(C)
+PLOT	V(E)
+.endc
+
+.end

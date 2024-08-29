@@ -1,0 +1,10 @@
+Derivative
+* ---------------------------------------------------------------------------------
+* Derivative subcircuit for solution of systems of nonlinear differential equations
+
+.SUBCKT Derivative Yi Yi_prime
+CC	Yi	int	1F
+VV	int	0	0V
+FIv	0	Yi	VV	1
+HIv	Yi_prime	0	VV	1
+.ENDS

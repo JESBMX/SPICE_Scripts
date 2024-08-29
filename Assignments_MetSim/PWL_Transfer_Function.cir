@@ -1,0 +1,56 @@
+PWL_Transfer_Function
+* -------------------------------------------
+*            PWL Transfer Function
+
+* Vx0 x0 0 DC -10
+* Vy0 y0 0 DC -4.5
+* Vx1 x1 0 DC -9.99
+* Vy1 y1 0 DC -3
+* Vx2 x2 0 DC -5
+* Vy2 y2 0 DC -3
+* Vx3 x3 0 DC -2
+* Vy3 y3 0 DC -2
+* Vx4 x4 0 DC 2
+* Vy4 y4 0 DC 2
+* Vx5 x5 0 DC 5
+* Vy5 y5 0 DC 3
+* Vx6 x6 0 DC 10
+* Vy6 y6 0 DC 3
+
+Vx0 x0 0 DC -10
+Vy0 y0 0 DC -3
+Vx1 x1 0 DC -5
+Vy1 y1 0 DC -3
+Vx2 x2 0 DC -2
+Vy2 y2 0 DC -2
+Vx3 x3 0 DC 2
+Vy3 y3 0 DC 2
+Vx4 x4 0 DC 5
+Vy4 y4 0 DC 3
+Vx5 x5 0 DC 10
+Vy5 y5 0 DC 3
+
+Vx x 0 DC 0
+
+xlins1 x y x0 y0 x1 y1 LineSegment
+xlins2 x y x1 y1 x2 y2 LineSegment
+xlins3 x y x2 y2 x3 y3 LineSegment
+xlins4 x y x3 y3 x4 y4 LineSegment
+xlins5 x y x4 y4 x5 y5 LineSegment
+* xlins6 x y x5 y5 x6 y6 LineSegment
+
+.SUBCKT LineSegment x y Xi Yi Xin Yin
+bfi in1 0 V = ((v(Yin)-v(Yi))/(v(Xin)-v(Xi)))*v(x)+(v(Yi)*v(Xin)-v(Yin)*v(Xi))/(v(Xin)-v(Xi))
+
+s1 in2 in1 x Xi SwitchModel off
+s2 y in2 Xin x SwitchModel off
+
+.MODEL SwitchModel sw
+.ENDS
+
+.control
+DC Vx -10 10 0.01
+PLOT v(y)
+.endc
+
+.end

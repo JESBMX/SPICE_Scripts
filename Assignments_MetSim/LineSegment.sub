@@ -1,0 +1,12 @@
+LineSegment
+* ------------------------------------------------------------------
+*         LineSegment subcircuit for solution with PWL
+
+.SUBCKT LineSegment x y Xi Yi Xin Yin
+BFi in1 0 V = ((v(Yin)-v(Yi))/(v(Xin)-v(Xi)))*v(x)+(v(Yi)*v(Xin)-v(Yin)*v(Xi))/(v(Xin)-v(Xi))
+
+S1 in2 in1 x Xi SwitchModel OFF
+S2 y in2 Xin x SwitchModel OFF
+
+.MODEL SwitchModel SW
+.ENDS
